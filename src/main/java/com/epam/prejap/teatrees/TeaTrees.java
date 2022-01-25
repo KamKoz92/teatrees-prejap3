@@ -27,8 +27,8 @@ class TeaTrees {
             moved = false;
 
             playfield.nextBlock();
-            score++;
-
+            
+            waiter.decreaseCycleDelay(++score);
             boolean nextMove;
             do {
                 waiter.waitForIt();
