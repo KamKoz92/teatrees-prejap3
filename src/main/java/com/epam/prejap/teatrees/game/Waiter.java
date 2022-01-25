@@ -18,10 +18,8 @@ public class Waiter {
      * @since 0.2
      */
     public void decreaseCycleDelay(int score) {
-        if (score % 10 == 0) {
-            if (milliseconds > 100) {
-                milliseconds -= 100;
-            }
+        if (score % 10 == 0 && milliseconds > 100) {
+            milliseconds -= 100;
         }
     }
 
