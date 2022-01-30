@@ -2,6 +2,14 @@ package com.epam.prejap.teatrees.game;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * The {@code Waiter} class allows to pause code execution by invoking
+ * {@link #waitForIt()}.
+ * Wait time is specified in the constructor and can be decreased by
+ * {@link #decreaseCycleDelay(int)}.
+ * 
+ * @since 0.1
+ */
 public class Waiter {
     private final int DELAY_DECREASE = 100;
     private int milliseconds;
@@ -11,7 +19,6 @@ public class Waiter {
      * delay value set to the value of the passed argument.
      * 
      * @param milliseconds internal delay time in milliseconds
-     * @since 0.1
      */
     public Waiter(int milliseconds) {
         this.milliseconds = milliseconds;
@@ -33,8 +40,6 @@ public class Waiter {
     /**
      * Causes to pause code execution for the time specified
      * in the object's internal delay variable.
-     * 
-     * @since 0.1
      */
     public void waitForIt() {
         try {
