@@ -3,11 +3,11 @@ package com.epam.prejap.teatrees.game;
 import java.util.concurrent.TimeUnit;
 
 public class Waiter {
-
+    private final int DELAY_DECREASE = 100;
     private int milliseconds;
 
     /**
-     * Constructs a newly allocated {@code Waiter} object with an internal
+     * Initializes a newly created {@code Waiter} object with an internal
      * delay value set to the value of the passed argument.
      * 
      * @param milliseconds internal delay time in milliseconds
@@ -25,10 +25,9 @@ public class Waiter {
      * @since 0.3
      */
     public void decreaseCycleDelay(int score) {
-        if (score % 10 == 0 && milliseconds > 100) {
-            milliseconds -= 100;
+        if (score % 10 == 0 && milliseconds > DELAY_DECREASE) {
+            milliseconds -= DELAY_DECREASE;
         }
-
     }
 
     /**
