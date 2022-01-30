@@ -7,12 +7,11 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class WaiterTest {
-    private final int possibleError = 10;
-    private Waiter waiter;
+    private final int POSSIBLE_ERROR = 10;
 
     @Test(dataProvider = "waiter")
     public void testCycleDelay(int numberOfFuntionCalls, int expectedTime) {
-        waiter = new Waiter(500);
+        Waiter waiter = new Waiter(500);
         IntStream.range(0, numberOfFuntionCalls).forEach(x -> waiter.decreaseCycleDelay(numberOfFuntionCalls * 10));
 
         long start = System.currentTimeMillis();
@@ -20,7 +19,7 @@ public class WaiterTest {
         long stop = System.currentTimeMillis();
         long actualTime = stop - start;
 
-        assertTrue(Math.abs(actualTime - expectedTime) < possibleError);
+        assertTrue(Math.abs(actualTime - expectedTime) < POSSIBLE_ERROR);
     }
 
     @DataProvider
