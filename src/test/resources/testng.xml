@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="TeaTrees Suite" verbose="2">
+    <test name="game">
+        <groups>
+        <define name="moves">
+            <include name="nextMove"/>
+        </define>
+        <run>
+            <include name="moves"/>
+        </run>
+        </groups>
+        <classes>
+            <class name="com.epam.prejap.teatrees.player.RandomPlayerTest"/>
+        </classes>
+    </test>
+    <test name="integration-test">
+        <groups>
+            <define name="jar-test">
+                <include name="IT"/>
+            </define>
+            <run>
+                <include name="jar-test"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="com.epam.prejap.teatrees.JarIT"/>
+        </classes>
+    </test>
+</suite>
