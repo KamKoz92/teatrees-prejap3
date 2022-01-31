@@ -2,6 +2,10 @@ package com.epam.prejap.teatrees.game;
 
 import com.epam.prejap.teatrees.block.Block;
 import com.epam.prejap.teatrees.block.BlockFeed;
+import com.github.kwhat.jnativehook.GlobalScreen;
+import com.github.kwhat.jnativehook.NativeHookException;
+import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
+import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 
 public class Playfield {
 
@@ -14,6 +18,7 @@ public class Playfield {
     private Block block;
     private int row;
     private int col;
+    private boolean downArrowPressed;
 
     public Playfield(int rows, int cols, BlockFeed feed, Printer printer) {
         this.rows = rows;
@@ -21,6 +26,19 @@ public class Playfield {
         this.feed = feed;
         this.printer = printer;
         grid = new byte[this.rows][this.cols];
+        try {
+            GlobalScreen.registerNativeHook();
+        } catch (NativeHookException e) {
+            System.err.println("There was a problem registering the native hook: " + e.getMessage());
+        }
+        GlobalScreen.addNativeKeyListener(new NativeKeyListener() {
+            @Override
+            public void nativeKeyPressed(NativeKeyEvent key) {
+                if (key.getKeyCode() == NativeKeyEvent.VC_DOWN) {
+                    downArrowPressed = true;
+                }
+            }
+        });
     }
 
     public void nextBlock() {
@@ -33,15 +51,19 @@ public class Playfield {
     public boolean move(Move move) {
         hide();
         boolean moved;
+        if (downArrowPressed) {
+            moved = moveAllWayDown();
+            downArrowPressed = false;
+        } else {
             switch (move) {
                 case LEFT -> moveLeft();
                 case RIGHT -> moveRight();
             }
             moved = moveDown();
+        }
         show();
         return moved;
     }
-
 
     private void moveRight() {
         move(0, 1);
@@ -53,6 +75,17 @@ public class Playfield {
 
     private boolean moveDown() {
         return move(1, 0);
+    }
+
+    private boolean moveAllWayDown() {
+        return move(checkMoveDepth(), 0);
+    }
+
+    private int checkMoveDepth() {
+        int deep = 0;
+        while (isValidMove(block, ++deep, 0))
+            ;
+        return --deep;
     }
 
     private boolean move(int rowOffset, int colOffset) {

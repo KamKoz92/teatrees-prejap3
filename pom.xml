@@ -15,10 +15,18 @@
         <version.plugin.maven.enforcer>3.0.0</version.plugin.maven.enforcer>
         <version.plugin.maven.surefire>3.0.0-M5</version.plugin.maven.surefire>
         <version.plugin.maven.jar>3.2.0</version.plugin.maven.jar>
+        <version.jnativehook>2.2.1</version.jnativehook>
         <version.testng>7.5</version.testng>
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.github.kwhat</groupId>
+            <artifactId>jnativehook</artifactId>
+            <version>${version.jnativehook}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
