@@ -3,41 +3,54 @@
 <suite name="TeaTrees Suite" verbose="2">
     <test name="game">
         <groups>
-        <define name="moves">
-            <include name="nextMove"/>
-        </define>
-        <run>
-            <include name="moves"/>
-        </run>
+            <define name="moves">
+                <include name="nextMove" />
+            </define>
+            <run>
+                <include name="moves" />
+            </run>
         </groups>
         <classes>
-            <class name="com.epam.prejap.teatrees.player.RandomPlayerTest"/>
+            <class name="com.epam.prejap.teatrees.player.RandomPlayerTest" />
         </classes>
     </test>
     <test name="integration-test">
         <groups>
             <define name="jar-test">
-                <include name="IT"/>
+                <include name="IT" />
             </define>
             <run>
-                <include name="jar-test"/>
+                <include name="jar-test" />
             </run>
         </groups>
         <classes>
-            <class name="com.epam.prejap.teatrees.JarIT"/>
+            <class name="com.epam.prejap.teatrees.JarIT" />
         </classes>
     </test>
     <test name="waiter">
         <groups>
             <define name="waitTimeTest">
-                <include name="waitSomeTime"/>
+                <include name="waitSomeTime" />
             </define>
             <run>
-                <include name="waitTimeTest"/>
+                <include name="waitTimeTest" />
             </run>
         </groups>
         <classes>
             <class name="com.epam.prejap.teatrees.game.WaiterTest"></class>
+        </classes>
+    </test>
+    <test name="block">
+        <groups>
+            <define name="block-tests">
+                <include name="blocks" />
+            </define>
+            <run>
+                <include name="block-tests" />
+            </run>
+        </groups>
+        <classes>
+            <class name="com.epam.prejap.teatrees.block.ZBlockTest" />
         </classes>
     </test>
 </suite>
