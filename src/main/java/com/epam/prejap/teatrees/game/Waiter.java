@@ -29,7 +29,7 @@ public class Waiter {
      * Minimum delay is capped at 100 milliseconds.
      * 
      * @param score game score
-     * @since 0.5
+     * @since 0.6
      */
     public void decreaseCycleDelay(int score) {
         if (score % 10 == 0 && milliseconds > DELAY_DECREASE) {
