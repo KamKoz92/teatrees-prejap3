@@ -9,7 +9,7 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 
 public class Playfield {
 
-    private final byte[][] grid;
+    final byte[][] grid;
     private final int rows;
     private final int cols;
     private final Printer printer;
@@ -18,7 +18,7 @@ public class Playfield {
     private Block block;
     private int row;
     private int col;
-    private boolean downArrowPressed;
+    boolean downArrowPressed;
 
     public Playfield(int rows, int cols, BlockFeed feed, Printer printer) {
         this.rows = rows;
