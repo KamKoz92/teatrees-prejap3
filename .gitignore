@@ -150,5 +150,8 @@ tags
 # Persistent undo
 [._]*.un~
 
+#VS Code
+.vscode
+
 # End of https://www.toptal.com/developers/gitignore/api/java,maven,intellij+all,vim
 
