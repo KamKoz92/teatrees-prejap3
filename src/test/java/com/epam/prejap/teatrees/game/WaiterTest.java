@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 public class WaiterTest {
     private final int POSSIBLE_ERROR = 20;
 
-    @Test(dataProvider = "waiter", groups = "waitSomeTime")
+    @Test(dataProvider = "waiter", groups = "waiting-tests")
     public void testCycleDelay(int numberOfFuntionCalls, int expectedTime) {
         Waiter waiter = new Waiter(500);
         IntStream.range(0, numberOfFuntionCalls).forEach(x -> waiter.decreaseCycleDelay(numberOfFuntionCalls * 10));

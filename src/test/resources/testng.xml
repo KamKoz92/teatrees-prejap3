@@ -29,11 +29,11 @@
     </test>
     <test name="waiter">
         <groups>
-            <define name="waitTimeTest">
+            <define name="waiting-tests">
                 <include name="waitSomeTime" />
             </define>
             <run>
-                <include name="waitTimeTest" />
+                <include name="waiting-tests" />
             </run>
         </groups>
         <classes>
@@ -53,4 +53,5 @@
             <class name="com.epam.prejap.teatrees.block.ZBlockTest" />
         </classes>
     </test>
+    
 </suite>
