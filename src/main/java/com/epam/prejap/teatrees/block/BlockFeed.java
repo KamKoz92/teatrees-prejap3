@@ -6,12 +6,13 @@ import java.util.function.Supplier;
 
 public class BlockFeed {
 
-    private final Random rnd = new Random();
-    protected final List<Supplier<Block>> blocks = List.of(
+    private final Random rnd;
+    private final List<Supplier<Block>> blocks = List.of(
             OBlock::new, ZBlock::new
     );
 
-    public BlockFeed() {
+    public BlockFeed(Random random) {
+        this.rnd = random;
     }
 
     public Block nextBlock() {

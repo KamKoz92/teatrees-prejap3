@@ -2,8 +2,8 @@ package com.epam.prejap.teatrees.game;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.Random;
 
-import com.epam.prejap.teatrees.block.Block;
 import com.epam.prejap.teatrees.block.BlockFeed;
 
 import org.testng.annotations.BeforeTest;
@@ -43,7 +43,7 @@ public class PlayfieldTest {
 
     @Test(groups = "bottomMove")
     public void testBottomMove() {
-        Playfield playfield = new Playfield(5, 6, new TestBlockFeed(),
+        Playfield playfield = new Playfield(5, 6, new BlockFeed(new MyRandom()),
                 new Printer(new PrintStream(this.consoleContent)));
         SoftAssert sa = new SoftAssert();
 
@@ -60,10 +60,10 @@ public class PlayfieldTest {
         sa.assertAll();
     }
 
-    class TestBlockFeed extends BlockFeed {
+    class MyRandom extends Random {
         @Override
-        public Block nextBlock() {
-            return blocks.get(0).get();
+        public int nextInt(int i) {
+            return 0;
         }
     }
 
