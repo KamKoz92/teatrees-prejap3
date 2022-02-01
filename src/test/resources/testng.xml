@@ -7,6 +7,7 @@
                 <include name="blocks"/>
                 <include name="waiting"/>
                 <include name="nextMove"/>
+                <include name="bottomMove"/>
             </define>
             <run>
                 <include name="unit-tests"/>
@@ -15,6 +16,7 @@
         <classes>
             <class name="com.epam.prejap.teatrees.block.ZBlockTest"/>
             <class name="com.epam.prejap.teatrees.game.WaiterTest"/>
+            <class name="com.epam.prejap.teatrees.game.Playfield"/>
             <class name="com.epam.prejap.teatrees.player.RandomPlayerTest"/>
         </classes>
     </test>

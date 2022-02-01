@@ -10,12 +10,12 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
-public class PlayFieldTest {
+public class PlayfieldTest {
     private byte[][] expectedGridAfterFirstBlock;
     private byte[][] expectedGridAfterKeyDown;
     private byte[][] expectedGridAfterSecondBlock;
     private ByteArrayOutputStream consoleContent = new ByteArrayOutputStream();
-    
+
     @BeforeTest
     void BeforeTest() {
         expectedGridAfterFirstBlock = new byte[][] {
@@ -41,10 +41,10 @@ public class PlayFieldTest {
         };
     }
 
-
-    @Test(groups = "bottom-move-test")
+    @Test(groups = "bottomMove")
     public void testBottomMove() {
-        Playfield playfield = new Playfield(5, 6, new TestBlockFeed(), new Printer(new PrintStream(this.consoleContent)));
+        Playfield playfield = new Playfield(5, 6, new TestBlockFeed(),
+                new Printer(new PrintStream(this.consoleContent)));
         SoftAssert sa = new SoftAssert();
 
         playfield.nextBlock();

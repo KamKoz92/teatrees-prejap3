@@ -52,8 +52,8 @@ public class Playfield {
         hide();
         boolean moved;
         if (downArrowPressed) {
-            moved = moveAllWayDown();
-            downArrowPressed = false;
+            moveAllWayDown();
+            moved = downArrowPressed = false;
         } else {
             switch (move) {
                 case LEFT -> moveLeft();
@@ -77,15 +77,15 @@ public class Playfield {
         return move(1, 0);
     }
 
-    private boolean moveAllWayDown() {
-        return move(checkMoveDepth(), 0);
+    private void moveAllWayDown() {
+        move(checkMoveDepth(), 0);
     }
 
     private int checkMoveDepth() {
-        int deep = 0;
-        while (isValidMove(block, ++deep, 0))
+        int depth = 0;
+        while (isValidMove(block, ++depth, 0))
             ;
-        return --deep;
+        return --depth;
     }
 
     private boolean move(int rowOffset, int colOffset) {
