@@ -10,6 +10,9 @@ public class Printer {
         this.out = out;
     }
 
+    public void printExcpetion(Exception e) {
+        System.err.println(e.getClass().getSimpleName()+" occured. Exception message : " + e.getMessage());
+    }
     void draw(byte[][] grid) {
         clear();
         border(grid[0].length);

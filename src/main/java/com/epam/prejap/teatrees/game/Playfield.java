@@ -30,7 +30,7 @@ public class Playfield {
         try {
             GlobalScreen.registerNativeHook();
         } catch (NativeHookException e) {
-            System.err.println("There was a problem registering the native hook: " + e.getMessage());
+            printer.printExcpetion(e);
         }
         GlobalScreen.addNativeKeyListener(new NativeKeyListener() {
             @Override

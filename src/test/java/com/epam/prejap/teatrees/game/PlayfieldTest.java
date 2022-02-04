@@ -15,6 +15,16 @@ import org.testng.asserts.SoftAssert;
 
 @Test
 public class PlayfieldTest {
+
+        private Integer[] expectedGridAfterFirstBlock;
+        private Integer[] expectedGridAfterKeyDown;
+        private Integer[] expectedGridAfterSecondBlock;
+        private ByteArrayOutputStream consoleContent = new ByteArrayOutputStream();
+
+        PlayfieldTest() {
+                initializeGridsForBottomMove();
+        }
+
         private Playfield createPlayfield(byte[][] grid) {
                 Printer printer = new Printer(new PrintStream(new ByteArrayOutputStream()));
                 BlockFeed blockFeed = new BlockFeed(new Random());
@@ -266,15 +276,6 @@ public class PlayfieldTest {
                 sa.assertSame(playfield.block, block);
                 sa.assertEquals(playfield.grid, expectedGrid);
                 sa.assertAll();
-        }
-
-        private Integer[] expectedGridAfterFirstBlock;
-        private Integer[] expectedGridAfterKeyDown;
-        private Integer[] expectedGridAfterSecondBlock;
-        private ByteArrayOutputStream consoleContent = new ByteArrayOutputStream();
-
-        PlayfieldTest() {
-                initializeGridsForBottomMove();
         }
 
         void initializeGridsForBottomMove() {
