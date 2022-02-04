@@ -17,9 +17,10 @@
         </groups>
         <classes>
             <class name="com.epam.prejap.teatrees.block.ZBlockTest"/>
+            <class name="com.epam.prejap.teatrees.block.RotatedBlock"/>
             <class name="com.epam.prejap.teatrees.game.WaiterTest"/>
-            <class name="com.epam.prejap.teatrees.game.Playfield"/>
             <class name="com.epam.prejap.teatrees.game.GridTest"/>
+            <class name="com.epam.prejap.teatrees.game.PlayfieldTest"/>
             <class name="com.epam.prejap.teatrees.player.RandomPlayerTest"/>
             <class name="com.epam.prejap.teatrees.pause.PauseTest"/>
         </classes>
