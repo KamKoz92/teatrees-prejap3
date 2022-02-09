@@ -1,8 +1,6 @@
 package com.epam.prejap.teatrees.game;
 
 import com.epam.prejap.teatrees.block.Block;
-import java.util.function.Supplier;
-
 import com.epam.prejap.teatrees.block.BlockSupplier;
 import com.epam.prejap.teatrees.block.RotatedBlock;
 

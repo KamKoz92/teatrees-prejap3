@@ -65,8 +65,11 @@ class TeaTrees implements ConsumerEvent {
         var game = new TeaTrees(playfield, new Waiter(delay), new RandomPlayer(new Random()),
                 new PauseMonitor(new InputStreamReader(System.in), new Pause(waiter)));
 
+        Test test = new Test();
+
         keyLogger.subscribeForKey(Key.VC_SPACE, game::accept);
         keyLogger.subscribeForKey(Key.VC_R, game::accept);
+        keyLogger.subscribeForKey(Key.VC_R, test::accept);
         int a = 1;
 
         while (a < 500000) {
