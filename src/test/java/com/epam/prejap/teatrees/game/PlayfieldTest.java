@@ -5,8 +5,6 @@ import static org.testng.Assert.assertEquals;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
-import java.util.Random;
-import java.util.stream.IntStream;
 
 import com.epam.prejap.teatrees.block.Block;
 import com.epam.prejap.teatrees.block.BlockFeed;
@@ -18,12 +16,20 @@ import org.testng.asserts.SoftAssert;
 
 @Test
 public class PlayfieldTest {
+        private Grid expectedGridAfterFirstBlock;
+        private Grid expectedGridAfterSecondBlock;
+        private Grid expectedGridAfterKeyDown;
+        private ByteArrayOutputStream consoleContent = new ByteArrayOutputStream();
+
+        PlayfieldTest() {
+                initializeGridsForBottomMove();
+        }
 
         private final Class<Playfield> playfieldClass = Playfield.class;
 
         private Playfield createPlayfield(byte[][] grid) {
                 Printer printer = new Printer(new PrintStream(new ByteArrayOutputStream()));
-                BlockFeed blockFeed = new BlockFeed(new Random());
+                BlockFeed blockFeed = new BlockFeed();
                 Playfield playfield = new Playfield(grid.length, grid[0].length, blockFeed, printer);
                 for (int i = 0; i < grid.length; ++i)
                         for (int j = 0; j < grid[0].length; ++j)
@@ -291,7 +297,7 @@ public class PlayfieldTest {
         @Test(groups = "nextBlock")
         public void shouldHintBlockBecomeCurrentlyPlayedBlock() throws IllegalAccessException {
                 // given
-                Playfield playfield = new Playfield(10, 10, new BlockFeed(new Random()), new FakePrinter());
+                Playfield playfield = new Playfield(10, 10, new BlockFeed(), new FakePrinter());
                 Object hintBlock = getBlock(playfield, "hintBlock");
 
                 // when
@@ -313,72 +319,51 @@ public class PlayfieldTest {
                 return hintBlock;
         }
 
-        private Integer[] expectedGridAfterFirstBlock;
-        private Integer[] expectedGridAfterKeyDown;
-        private Integer[] expectedGridAfterSecondBlock;
-        private ByteArrayOutputStream consoleContent = new ByteArrayOutputStream();
-
-        PlayfieldTest() {
-                initializeGridsForBottomMove();
-        }
-
         void initializeGridsForBottomMove() {
-                expectedGridAfterFirstBlock = new Integer[] {
-                                0, 0, 1, 1, 0, 0,
-                                0, 0, 1, 1, 0, 0,
-                                0, 0, 0, 0, 0, 0,
-                                0, 0, 0, 0, 0, 0,
-                                0, 0, 0, 0, 0, 0 };
-                expectedGridAfterKeyDown = new Integer[] {
-                                0, 0, 0, 0, 0, 0,
-                                0, 0, 0, 0, 0, 0,
-                                0, 0, 0, 0, 0, 0,
-                                0, 0, 1, 1, 0, 0,
-                                0, 0, 1, 1, 0, 0 };
-                expectedGridAfterSecondBlock = new Integer[] {
-                                0, 0, 1, 1, 0, 0,
-                                0, 0, 1, 1, 0, 0,
-                                0, 0, 0, 0, 0, 0,
-                                0, 0, 1, 1, 0, 0,
-                                0, 0, 1, 1, 0, 0 };
+                expectedGridAfterFirstBlock = new Grid(new byte[][] {
+                                { 0, 0, 1, 1, 0, 0 },
+                                { 0, 0, 1, 1, 0, 0 },
+                                { 0, 0, 0, 0, 0, 0 },
+                                { 0, 0, 46, 46, 0, 0 },
+                                { 0, 0, 46, 46, 0, 0 } });
+                expectedGridAfterKeyDown = new Grid(new byte[][] {
+                                { 0, 0, 0, 0, 0, 0 },
+                                { 0, 0, 0, 0, 0, 0 },
+                                { 0, 0, 0, 0, 0, 0 },
+                                { 0, 0, 1, 1, 0, 0 },
+                                { 0, 0, 1, 1, 0, 0 } });
+                expectedGridAfterSecondBlock = new Grid(new byte[][] {
+                                { 0, 0, 1, 1, 0, 0 },
+                                { 0, 0, 1, 1, 0, 0 },
+                                { 0, 0, 46, 46, 0, 0 },
+                                { 0, 0, 1, 1, 0, 0 },
+                                { 0, 0, 1, 1, 0, 0 } });
         }
 
         @Test(groups = "bottomMove")
         public void testBottomMove() {
-                Playfield playfield = new Playfield(5, 6, new BlockFeed(new MyRandom()),
+                Playfield playfield = new Playfield(5, 6, new myBlockFeed(),
                                 new Printer(new PrintStream(this.consoleContent)));
                 SoftAssert sa = new SoftAssert();
 
                 playfield.nextBlock();
-                byte[] arrayAfterFirstBlock = this.consoleContent.toByteArray();
-                Integer[] outAfterFirstBlock = IntStream.range(0, arrayAfterFirstBlock.length)
-                                .mapToObj(b -> arrayAfterFirstBlock[b])
-                                .filter(f -> f == ' ' || f == '#').map(i -> (i == ' ' ? 0 : 1)).toArray(Integer[]::new);
-                sa.assertEquals(outAfterFirstBlock, expectedGridAfterFirstBlock);
+                sa.assertEquals(playfield.grid, expectedGridAfterFirstBlock);
 
-                this.consoleContent.reset();
-                playfield.move(Move.NONE);
-                byte[] arrayAfterKeyDown = this.consoleContent.toByteArray();
-                Integer[] outAfterKeyDown = IntStream.range(0, arrayAfterKeyDown.length)
-                                .mapToObj(b -> arrayAfterKeyDown[b])
-                                .filter(f -> f == ' ' || f == '#').map(i -> (i == ' ' ? 0 : 1)).toArray(Integer[]::new);
-                sa.assertEquals(outAfterKeyDown, expectedGridAfterKeyDown);
+                playfield.move(Move.DOWN);
+                sa.assertEquals(playfield.grid, expectedGridAfterKeyDown);
 
-                this.consoleContent.reset();
                 playfield.nextBlock();
-                byte[] arrayAfterSecondBlock = this.consoleContent.toByteArray();
-                Integer[] outAfterSecondBlock = IntStream.range(0, arrayAfterSecondBlock.length)
-                                .mapToObj(b -> arrayAfterSecondBlock[b])
-                                .filter(f -> f == ' ' || f == '#').map(i -> (i == ' ' ? 0 : 1)).toArray(Integer[]::new);
-                sa.assertEquals(outAfterSecondBlock, expectedGridAfterSecondBlock);
+                sa.assertEquals(playfield.grid, expectedGridAfterSecondBlock);
 
                 sa.assertAll();
         }
 
-        class MyRandom extends Random {
+        class myBlockFeed extends BlockFeed {
                 @Override
-                public int nextInt(int i) {
-                        return 0;
+                public Block nextBlock() {
+                        return new MockedBlock(
+                                        new byte[][] { { 1, 1 },
+                                                        { 1, 1 } });
                 }
         }
 

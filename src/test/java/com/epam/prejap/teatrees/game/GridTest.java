@@ -43,7 +43,6 @@ public class GridTest {
         assertEquals(grid.isCellEmpty(indexes[0], indexes[1]), expected);
     }
 
-    //TODO: cleanCell
     @Test(dataProvider = "dataForCleanCell")
     public void shouldPassIfCellValueIsChangedTo0(int[] indexes, boolean expected) {
         // Given
@@ -60,7 +59,6 @@ public class GridTest {
         assertEquals(grid.isCellEmpty(indexes[0], indexes[1]), expected);
     }
 
-    //TODO: fillCell
     @Test(dataProvider = "dataForFillCell")
     public void shouldPassIfCellValueIsChangedToDot(int[] indexesAndDot, boolean expected) {
         // Given

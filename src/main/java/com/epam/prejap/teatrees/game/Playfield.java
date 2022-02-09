@@ -9,6 +9,7 @@ public class Playfield {
     private final int cols;
     private final Printer printer;
     private final BlockSupplier feed;
+    private boolean moved;
 
     final Grid grid;
     Block block;
@@ -41,6 +42,10 @@ public class Playfield {
         show();
     }
 
+    public boolean getMoved() {
+        return moved;
+    }
+
     /**
      * Perform move for current block if possible
      * (there is place for the block after move).
@@ -59,39 +64,43 @@ public class Playfield {
      */
     public boolean move(Move move) {
         hide();
-        boolean moved;
-
+        moved = false;
+        boolean nextMove;
         switch (move) {
-            case LEFT -> moveLeft();
-            case RIGHT -> moveRight();
-            case UP -> rotate();
+            case LEFT -> moved = moveLeft();
+            case RIGHT -> moved = moveRight();
+            case UP -> moved = rotate();
+            case DOWN -> moved = moveAllWayDown();
         }
-        moved = moveDown();
+        nextMove = moveDown();
 
         show();
-        return moved;
+        return nextMove;
     }
 
-    private void moveRight() {
-        move(0, 1);
+    private boolean moveRight() {
+        return move(0, 1);
     }
 
-    private void moveLeft() {
-        move(0, -1);
+    private boolean moveLeft() {
+        return move(0, -1);
     }
 
     private boolean moveDown() {
         return move(1, 0);
     }
 
-    private void moveAllWayDown() {
-        move(checkMoveDepth(), 0);
+    private boolean moveAllWayDown() {
+        return move(checkMoveDepth(), 0);
     }
 
     private int checkMoveDepth() {
         int depth = 0;
         while (isValidMove(block, ++depth, 0))
             ;
+        if (depth == 1) {
+            return cols + 1;
+        }
         return --depth;
     }
 
@@ -104,12 +113,14 @@ public class Playfield {
         return moved;
     }
 
-    private void rotate() {
+    private boolean rotate() {
         Block rotated = new RotatedBlock(block);
         if (isValidMove(rotated, 0, 0)) {
             block = rotated;
             rowShadow = calculateShadowRow(row);
+            return true;
         }
+        return false;
     }
 
     private boolean isValidMove(Block block, int rowOffset, int colOffset) {
