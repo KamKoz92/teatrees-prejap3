@@ -1,23 +1,19 @@
 package com.epam.prejap.teatrees;
 
 import java.io.InputStreamReader;
-import java.util.Random;
 
 import com.epam.prejap.teatrees.block.BlockFeed;
 import com.epam.prejap.teatrees.game.Move;
 import com.epam.prejap.teatrees.game.Playfield;
 import com.epam.prejap.teatrees.game.Printer;
 import com.epam.prejap.teatrees.game.Waiter;
-import com.epam.prejap.teatrees.keyboard.ConsumerEvent;
-import com.epam.prejap.teatrees.keyboard.Key;
-import com.epam.prejap.teatrees.keyboard.KeyLogger;
 import com.epam.prejap.teatrees.keyboard.KeyLoggerImp;
 import com.epam.prejap.teatrees.pause.Pause;
 import com.epam.prejap.teatrees.pause.PauseMonitor;
+import com.epam.prejap.teatrees.player.NormalPlayer;
 import com.epam.prejap.teatrees.player.Player;
-import com.epam.prejap.teatrees.player.RandomPlayer;
 
-class TeaTrees implements ConsumerEvent {
+class TeaTrees {
 
     private final Playfield playfield;
     private final Waiter waiter;
@@ -54,37 +50,19 @@ class TeaTrees implements ConsumerEvent {
     }
 
     public static void main(String[] args) {
+        KeyLoggerImp.registerKeyLogger();
         int rows = 10;
         int cols = 20;
         int delay = 500;
-        KeyLogger keyLogger = new KeyLoggerImp();
         var feed = new BlockFeed();
         var printer = new Printer(System.out);
         var playfield = new Playfield(rows, cols, feed, printer);
         var waiter = new Waiter(0);
-        var game = new TeaTrees(playfield, new Waiter(delay), new RandomPlayer(new Random()),
+        var game = new TeaTrees(playfield, new Waiter(delay), new NormalPlayer(),
                 new PauseMonitor(new InputStreamReader(System.in), new Pause(waiter)));
 
-        Test test = new Test();
-
-        keyLogger.subscribeForKey(Key.VC_SPACE, game::accept);
-        keyLogger.subscribeForKey(Key.VC_R, game::accept);
-        keyLogger.subscribeForKey(Key.VC_R, test::accept);
-        int a = 1;
-
-        while (a < 500000) {
-
-        }
-        System.out.println("Score: " + 1);
-        // System.out.println("Score: " + score.points());
-    }
-
-    @Override
-    public void accept(Integer keyCode) {
-        if (keyCode == Key.VC_SPACE) {
-            System.out.println("space pressed from game");
-        } else if (keyCode == Key.VC_R) {
-            System.out.println("r pressed from game");
-        }
+        var score = game.play();
+        System.out.println("Score: " + score.points());
+        KeyLoggerImp.unregisterKeyLogger();
     }
 }

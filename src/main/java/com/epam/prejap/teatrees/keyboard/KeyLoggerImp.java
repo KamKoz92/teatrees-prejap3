@@ -13,10 +13,29 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 
 public class KeyLoggerImp implements KeyLogger, NativeKeyListener {
 
-    Map<Integer, List<ConsumerEvent>> subscribers;
+    private static KeyLoggerImp instance;
+    Map<Key, List<KeyEvent>> subscribers;
 
-    public KeyLoggerImp() {
-        subscribers = new HashMap<Integer, List<ConsumerEvent>>();
+    public static void registerKeyLogger() {
+        if (instance == null) {
+            instance = new KeyLoggerImp();
+        }
+    }
+
+    public static void unregisterKeyLogger() {
+        try {
+            GlobalScreen.unregisterNativeHook();
+        } catch (NativeHookException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static KeyLogger getKeyLogger() {
+        return instance;
+    }
+
+    private KeyLoggerImp() {
+        subscribers = new HashMap<Key, List<KeyEvent>>();
         registerHook();
         addListener();
     }
@@ -35,28 +54,30 @@ public class KeyLoggerImp implements KeyLogger, NativeKeyListener {
     }
 
     @Override
-    public void subscribeForKey(int keyCode, ConsumerEvent event) {
-        if (!subscribers.containsKey(keyCode)) {
-            subscribers.put(keyCode, new ArrayList<ConsumerEvent>(Arrays.asList(event)));
+    public void subscribeForKey(int keyCode, KeyEvent event) {
+        Key key = Key.getKey(keyCode);
+        if (!subscribers.containsKey(key)) {
+            subscribers.put(key, new ArrayList<KeyEvent>(Arrays.asList(event)));
         } else {
-            subscribers.get(keyCode).add(event);
+            subscribers.get(key).add(event);
         }
 
     }
 
     @Override
-    public void unsubscribeForKey(int keyCode, ConsumerEvent event) {
-        if (subscribers.containsKey(keyCode)) {
-            if (subscribers.get(keyCode).contains(event)) {
-                subscribers.get(keyCode).remove(event);
-            }
+    public void unsubscribeForKey(int keyCode, KeyEvent event) {
+        Key key = Key.getKey(keyCode);
+        if (subscribers.containsKey(key) &&
+                subscribers.get(key).contains(event)) {
+            subscribers.get(key).remove(event);
         }
     }
 
     @Override
     public void nativeKeyPressed(NativeKeyEvent event) {
-        if (subscribers.containsKey(event.getKeyCode())) {
-            subscribers.get(event.getKeyCode()).forEach(sub -> sub.accept(event.getKeyCode()));
+        Key key = Key.getKey(event.getKeyCode());
+        if (subscribers.containsKey(key)) {
+            subscribers.get(key).forEach(sub -> sub.accept(key));
         }
     }
 }

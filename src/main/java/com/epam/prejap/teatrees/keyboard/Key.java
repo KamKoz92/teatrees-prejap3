@@ -1,5 +1,7 @@
 package com.epam.prejap.teatrees.keyboard;
 
+import java.util.Objects;
+
 public class Key {
 
     public static final int NATIVE_KEY_FIRST = 2400;
@@ -304,7 +306,36 @@ public class Key {
 
     private int keyCode;
 
-    public Key(int keyCode) {
+    private Key(int keyCode) {
         this.keyCode = keyCode;
+    }
+
+    public static Key getKey(int keyCode) {
+        return new Key(keyCode);
+    }
+
+    public boolean equals(int keyCode) {
+        return this.keyCode == keyCode;
+    }
+
+    public int getKeyCode() {
+        return keyCode;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null)
+            return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Key otherKey = (Key) o;
+        return keyCode == otherKey.keyCode;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(keyCode);
     }
 }
