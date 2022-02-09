@@ -23,11 +23,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.kwhat</groupId>
-            <artifactId>jnativehook</artifactId>
-            <version>${version.jnativehook}</version>
-        </dependency>
-        <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>${version.testng}</version>
