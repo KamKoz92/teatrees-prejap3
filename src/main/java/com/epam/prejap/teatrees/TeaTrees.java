@@ -33,7 +33,7 @@ class TeaTrees {
             moved = false;
 
             playfield.nextBlock();
-            
+
             waiter.decreaseCycleDelay(++score);
             boolean nextMove;
             do {

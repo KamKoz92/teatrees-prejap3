@@ -6,45 +6,48 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 @Test(groups = "blocks")
-public class ZBlockTest {
+public class YBlockTest {
     @DataProvider
-    public static Object[][] provideCoordinatesOfValuesForZShape() {
+    public static Object[][] provideCoordinatesOfValuesForYShape() {
         return new Object[][]{
                 {0, 0, 1},
-                {0, 1, 1},
-                {0, 2, 0},
+                {0, 1, 0},
+                {0, 2, 1},
                 {1, 0, 0},
                 {1, 1, 1},
-                {1, 2, 1},
+                {1, 2, 0},
+                {2, 0, 0},
+                {2, 1, 1},
+                {2, 2, 0},
         };
     }
 
     public void shouldHaveExpectedColumnSize() {
         // given
-        ZBlock zBlock = new ZBlock();
-        int expectedColumnSize = 3;
+        YBlock yBlock = new YBlock();
+        int expectedValue = 3;
         // when
-        int colSize = zBlock.cols();
+        int colSize = yBlock.cols();
         // then
-        assertEquals(colSize, expectedColumnSize);
+        assertEquals(colSize, expectedValue);
     }
 
     public void shouldHaveExpectedRowSize() {
         // given
-        ZBlock zBlock = new ZBlock();
-        int expectedRowSize = 2;
+        YBlock yBlock = new YBlock();
+        int expectedValue = 3;
         // when
-        int rowSize = zBlock.rows();
+        int rowSize = yBlock.rows();
         // then
-        assertEquals(rowSize, expectedRowSize);
+        assertEquals(rowSize, expectedValue);
     }
 
-    @Test(dataProvider = "provideCoordinatesOfValuesForZShape")
+    @Test(dataProvider = "provideCoordinatesOfValuesForYShape")
     public void shouldHaveExpectedValuesAtGivenCoordinates(int rowIndex, int colIndex, int expectedValue) {
         // given
-        ZBlock zBlock = new ZBlock();
+        YBlock yBlock = new YBlock();
         // when
-        byte actualValue = zBlock.dotAt(rowIndex, colIndex);
+        byte actualValue = yBlock.dotAt(rowIndex, colIndex);
         // then
         assertEquals(actualValue, expectedValue);
     }

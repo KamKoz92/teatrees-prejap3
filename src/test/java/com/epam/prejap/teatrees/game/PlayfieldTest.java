@@ -1,7 +1,10 @@
 package com.epam.prejap.teatrees.game;
 
+import static org.testng.Assert.assertEquals;
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.lang.reflect.Field;
 import java.util.Random;
 import java.util.stream.IntStream;
 
@@ -16,14 +19,7 @@ import org.testng.asserts.SoftAssert;
 @Test
 public class PlayfieldTest {
 
-        private Integer[] expectedGridAfterFirstBlock;
-        private Integer[] expectedGridAfterKeyDown;
-        private Integer[] expectedGridAfterSecondBlock;
-        private ByteArrayOutputStream consoleContent = new ByteArrayOutputStream();
-
-        PlayfieldTest() {
-                initializeGridsForBottomMove();
-        }
+        private final Class<Playfield> playfieldClass = Playfield.class;
 
         private Playfield createPlayfield(byte[][] grid) {
                 Printer printer = new Printer(new PrintStream(new ByteArrayOutputStream()));
@@ -59,6 +55,7 @@ public class PlayfieldTest {
                 Playfield playfield = createPlayfield(playfieldGrid);
                 playfield.block = block;
                 playfield.row = 1;
+                playfield.rowShadow = 3;
                 playfield.col = 1;
 
                 // when
@@ -68,6 +65,7 @@ public class PlayfieldTest {
                 SoftAssert sa = new SoftAssert();
                 sa.assertTrue(movedDown);
                 sa.assertEquals(playfield.row, 2);
+                sa.assertEquals(playfield.rowShadow, 2);
                 sa.assertEquals(playfield.col, 1);
                 sa.assertTrue(playfield.block instanceof RotatedBlock);
                 sa.assertEquals(playfield.grid, expectedGrid);
@@ -93,6 +91,7 @@ public class PlayfieldTest {
                 Playfield playfield = createPlayfield(playfieldGrid);
                 playfield.block = block;
                 playfield.row = 2;
+                playfield.rowShadow = 3;
                 playfield.col = 1;
 
                 // when
@@ -102,6 +101,7 @@ public class PlayfieldTest {
                 SoftAssert sa = new SoftAssert();
                 sa.assertFalse(movedDown);
                 sa.assertEquals(playfield.row, 2);
+                sa.assertEquals(playfield.rowShadow, 2);
                 sa.assertEquals(playfield.col, 1);
                 sa.assertTrue(playfield.block instanceof RotatedBlock);
                 sa.assertEquals(playfield.grid, expectedGrid);
@@ -119,14 +119,15 @@ public class PlayfieldTest {
                 var expectedGrid = new Grid(new byte[][] { { 0, 0, 0, 0, 0 },
                                 { 0, 1, 0, 0, 0 },
                                 { 1, 1, 0, 0, 0 },
-                                { 1, 0, 0, 0, 0 },
-                                { 0, 0, 0, 0, 0 } });
+                                { 1, '.', 0, 0, 0 },
+                                { '.', 0, 0, 0, 0 } });
 
                 Block block = mockedZBlock();
 
                 Playfield playfield = createPlayfield(playfieldGrid);
                 playfield.block = block;
                 playfield.row = 0;
+                playfield.rowShadow = 3;
                 playfield.col = 0;
 
                 // when
@@ -136,6 +137,7 @@ public class PlayfieldTest {
                 SoftAssert sa = new SoftAssert();
                 sa.assertTrue(movedDown);
                 sa.assertEquals(playfield.row, 1);
+                sa.assertEquals(playfield.rowShadow, 2);
                 sa.assertEquals(playfield.col, 0);
                 sa.assertTrue(playfield.block instanceof RotatedBlock);
                 sa.assertEquals(playfield.grid, expectedGrid);
@@ -161,6 +163,7 @@ public class PlayfieldTest {
                 Playfield playfield = createPlayfield(playfieldGrid);
                 playfield.block = block;
                 playfield.row = 1;
+                playfield.rowShadow = 1;
                 playfield.col = 1;
 
                 // when
@@ -170,6 +173,7 @@ public class PlayfieldTest {
                 SoftAssert sa = new SoftAssert();
                 sa.assertFalse(movedDown);
                 sa.assertEquals(playfield.row, 1);
+                sa.assertEquals(playfield.rowShadow, 1);
                 sa.assertEquals(playfield.col, 1);
                 sa.assertTrue(playfield.block instanceof RotatedBlock);
                 sa.assertEquals(playfield.grid, expectedGrid);
@@ -195,6 +199,7 @@ public class PlayfieldTest {
                 Playfield playfield = createPlayfield(playfieldGrid);
                 playfield.block = block;
                 playfield.row = 3;
+                playfield.rowShadow = 3;
                 playfield.col = 1;
 
                 // when
@@ -204,6 +209,7 @@ public class PlayfieldTest {
                 SoftAssert sa = new SoftAssert();
                 sa.assertFalse(movedDown);
                 sa.assertEquals(playfield.row, 3);
+                sa.assertEquals(playfield.rowShadow, 3);
                 sa.assertEquals(playfield.col, 1);
                 sa.assertSame(playfield.block, block);
                 sa.assertEquals(playfield.grid, expectedGrid);
@@ -229,6 +235,7 @@ public class PlayfieldTest {
                 Playfield playfield = createPlayfield(playfieldGrid);
                 playfield.block = block;
                 playfield.row = 1;
+                playfield.rowShadow = 2;
                 playfield.col = 3;
 
                 // when
@@ -238,6 +245,7 @@ public class PlayfieldTest {
                 SoftAssert sa = new SoftAssert();
                 sa.assertTrue(movedDown);
                 sa.assertEquals(playfield.row, 2);
+                sa.assertEquals(playfield.rowShadow, 2);
                 sa.assertEquals(playfield.col, 3);
                 sa.assertSame(playfield.block, block);
                 sa.assertEquals(playfield.grid, expectedGrid);
@@ -263,6 +271,7 @@ public class PlayfieldTest {
                 Playfield playfield = createPlayfield(playfieldGrid);
                 playfield.block = block;
                 playfield.row = 1;
+                playfield.rowShadow = 1;
                 playfield.col = 1;
 
                 // when
@@ -272,10 +281,45 @@ public class PlayfieldTest {
                 SoftAssert sa = new SoftAssert();
                 sa.assertFalse(movedDown);
                 sa.assertEquals(playfield.row, 1);
+                sa.assertEquals(playfield.rowShadow, 1);
                 sa.assertEquals(playfield.col, 1);
                 sa.assertSame(playfield.block, block);
                 sa.assertEquals(playfield.grid, expectedGrid);
                 sa.assertAll();
+        }
+
+        @Test(groups = "nextBlock")
+        public void shouldHintBlockBecomeCurrentlyPlayedBlock() throws IllegalAccessException {
+                // given
+                Playfield playfield = new Playfield(10, 10, new BlockFeed(new Random()), new FakePrinter());
+                Object hintBlock = getBlock(playfield, "hintBlock");
+
+                // when
+                playfield.nextBlock();
+
+                // then
+                assertEquals(getBlock(playfield, "block"), hintBlock);
+        }
+
+        private Object getBlock(Playfield playfield, String block) throws IllegalAccessException {
+                Object hintBlock = null;
+                Field[] fields = playfieldClass.getFields();
+                for (Field field : fields) {
+                        if (field.getName().equals(block)) {
+                                field.setAccessible(true);
+                                hintBlock = field.get(playfield);
+                        }
+                }
+                return hintBlock;
+        }
+
+        private Integer[] expectedGridAfterFirstBlock;
+        private Integer[] expectedGridAfterKeyDown;
+        private Integer[] expectedGridAfterSecondBlock;
+        private ByteArrayOutputStream consoleContent = new ByteArrayOutputStream();
+
+        PlayfieldTest() {
+                initializeGridsForBottomMove();
         }
 
         void initializeGridsForBottomMove() {
@@ -313,7 +357,6 @@ public class PlayfieldTest {
                 sa.assertEquals(outAfterFirstBlock, expectedGridAfterFirstBlock);
 
                 this.consoleContent.reset();
-                playfield.downArrowPressed = true;
                 playfield.move(Move.NONE);
                 byte[] arrayAfterKeyDown = this.consoleContent.toByteArray();
                 Integer[] outAfterKeyDown = IntStream.range(0, arrayAfterKeyDown.length)
@@ -337,5 +380,27 @@ public class PlayfieldTest {
                 public int nextInt(int i) {
                         return 0;
                 }
+        }
+
+}
+
+/**
+ * It's used only in shouldHintBlockBecomeCurrentlyPlayedBlock test.
+ * Tested method Playfield::nextBlock starts a method call chain that ends with
+ * Printer::draw. Printing is outside
+ * the scope of this test thus instance of this class is passed to Playfield's
+ * constructor.
+ *
+ * @see PlayfieldTest#shouldHintBlockBecomeCurrentlyPlayedBlock()
+ * @see Playfield#nextBlock()
+ * @see Printer#draw(byte[][], Block)
+ */
+class FakePrinter extends Printer {
+        FakePrinter() {
+                super(System.out);
+        }
+
+        @Override
+        void draw(byte[][] grid, Block hintBlock) {
         }
 }
