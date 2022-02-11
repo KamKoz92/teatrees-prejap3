@@ -4,21 +4,15 @@ import java.util.Optional;
 
 import com.epam.prejap.teatrees.game.Move;
 import com.epam.prejap.teatrees.keyboard.Key;
-import com.epam.prejap.teatrees.keyboard.KeyEvent;
+import com.epam.prejap.teatrees.keyboard.KeySubscriber;
 import com.epam.prejap.teatrees.keyboard.KeyLoggerImp;
 
-public class NormalPlayer implements Player, KeyEvent {
+public class NormalPlayer implements Player, KeySubscriber {
 
     private Move nextMove = Move.NONE;
 
     public NormalPlayer() {
-        registerKeys();
-    }
-
-    private void registerKeys() {
-        KeyLoggerImp.getKeyLogger().subscribeForKey(Key.VC_UP, this::accept);
-        KeyLoggerImp.getKeyLogger().subscribeForKey(Key.VC_LEFT, this::accept);
-        KeyLoggerImp.getKeyLogger().subscribeForKey(Key.VC_RIGHT, this::accept);
+        KeyLoggerImp.getKeyLogger().subscribeForKeys(this, Key.VC_UP, Key.VC_LEFT, Key.VC_RIGHT);
     }
 
     @Override

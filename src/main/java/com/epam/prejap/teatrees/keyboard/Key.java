@@ -302,6 +302,8 @@ public class Key {
 
     public static final int VC_UNDEFINED = 0;
 
+    public static final int VC_ALL = -1;
+
     public static final char CHAR_UNDEFINED = '￿';
 
     private int keyCode;
